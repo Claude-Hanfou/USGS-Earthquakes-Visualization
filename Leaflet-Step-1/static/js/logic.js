@@ -90,7 +90,7 @@ function chooseColor(magnitude) {
 // the markersize funcition is used to set radius of the marker on the map
 
 function markerSize(magnitude) {
-    return magnitude * 30000
+    return magnitude * 20000
   }
 
 
