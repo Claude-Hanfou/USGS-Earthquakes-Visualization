@@ -1,3 +1,4 @@
+//Create a create map function that is going to be called below when the data is collected from the json
 function createMap(earthquakes) {
 
     // Create the tile layer that will be the background of our map
@@ -30,26 +31,28 @@ function createMap(earthquakes) {
       collapsed: false
     }).addTo(map);
   }
-  
+ //--------------------------------------------------------------------------------------------------------------------------------------------- 
+//the create circle function is going to update the map with the earthquake data in the form of circles
+//the function takes a paraameter that later be replaced
 
 function createCircles(response) {
 
-    // Pull the "stations" property off of response.data
+    // Pull the response.features from the json
     var quakes = response.features;
     console.log(quakes);
 
 
-    // Initialize an array to hold bike markers
+    // Initialize an array to hold circles for the map
     var Circles = [];
 
-    // Loop through the stations array
+    // Loop through the circles array
     for (var i = 0; i < quakes.length; i++) {
         var quake = quakes[i].geometry.coordinates;
         var mag = quakes[i].properties.mag
         console.log(mag);
         
 
-        // For each station, create a marker and bind a popup with the station's name
+        // For each circle, create a marker and bind a popup with the place and magnitude number
         var Circle = L.circle([quake[1], quake[0]], {
                 fillOpacity: .6,
                 color: chooseColor(quakes[i].properties.mag),
@@ -62,13 +65,18 @@ function createCircles(response) {
         Circles.push(Circle);
     }
 
-    // Create a layer group made from the bike markers array, pass it into the createMap function
+    // Create a layer group made from the circles array, pass it into the createMap function
     createMap(L.layerGroup(Circles));
 
 }
 
+
+//---------------------------------------------------------------------------------------------------------------------------
+//get the json data from earthquakes in the last 7 days
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson", createCircles);
 
+//circles need colors and fill colors, since the choose color function was called inside the circle function, a choosecolor function is created 
+//this function uses a for loop to set the color of different magnitude level based on their numbers and
 function chooseColor(magnitude) {
     return magnitude > 5 ? "red":
            magnitude > 4 ? "orange":
@@ -79,6 +87,7 @@ function chooseColor(magnitude) {
       "greenyellow"
 
 }
+// the markersize funcition is used to set radius of the marker on the map
 
 function markerSize(magnitude) {
     return magnitude * 30000
