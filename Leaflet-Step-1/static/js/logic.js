@@ -32,48 +32,53 @@ function createMap(earthquakes) {
     }).addTo(map);
   }
  //--------------------------------------------------------------------------------------------------------------------------------------------- 
+
+
 //the create circle function is going to update the map with the earthquake data in the form of circles
 //the function takes a paraameter that later be replaced
-
 function createCircles(response) {
 
-    // Pull the response.features from the json
-    var quakes = response.features;
-    console.log(quakes);
+  // Pull the "stations" property off of response.data
+  var earths = response.features;
+  console.log(earths)
+ 
+
+ // Initialize an array to hold circles for the map
+  Circles = [];
+
+  // Loop through the circles array
+  for (var i = 0; i < earths.length; i++) {
+      earth = earths[i].geometry.coordinates;
+      console.log(earth)
+
+      // For each station, create a marker and bind a popup with the place name
+      
+      var circle = L.circle([earth[1], earth[0]] , {
+                   fillOpacity: .6,
+                   color: chooseColor(earths[i].properties.mag),
+                   fillColor: chooseColor(earths[i].properties.mag),
+                   radius: markerSize(earths[i].properties.mag)
+
+      }).bindPopup("<h3>" + earths[i].properties.place + "</h3><h3>Magnitude" + earths[i].properties.mag + "</h3>" )
 
 
-    // Initialize an array to hold circles for the map
-    var Circles = [];
+      // Add the marker to the Circles array
+      Circles.push(circle);
+  }
+  
 
-    // Loop through the circles array
-    for (var i = 0; i < quakes.length; i++) {
-        var quake = quakes[i].geometry.coordinates;
-        var mag = quakes[i].properties.mag
-        console.log(mag);
-        
-
-        // For each circle, create a marker and bind a popup with the place and magnitude number
-        var Circle = L.circle([quake[1], quake[0]], {
-                fillOpacity: .6,
-                color: chooseColor(quakes[i].properties.mag),
-                fillColor: chooseColor(quakes[i].properties.mag),
-                radius: markerSize(quakes[i].properties.mag)
-            })
-            .bindPopup("<h3>" + quakes[i].properties.place + "<h3><h3>Magnitude: " + quakes[i].properties.mag + "</h3>");
-          
-        // Add the marker to the Circles array
-        Circles.push(Circle);
-    }
-
-    // Create a layer group made from the circles array, pass it into the createMap function
-    createMap(L.layerGroup(Circles));
-
+  // Create a layer group made from the circles markers array, pass it into the createMap function
+     createMap(L.layerGroup(Circles));
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------
+
+
 //get the json data from earthquakes in the last 7 days
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson", createCircles);
+
+//---------------------------------------------------------------------------------------------------------------------------------
 
 //circles need colors and fill colors, since the choose color function was called inside the circle function, a choosecolor function is created 
 //this function uses a for loop to set the color of different magnitude level based on their numbers and
@@ -85,8 +90,9 @@ function chooseColor(magnitude) {
            magnitude > 1 ? "yellowgreen":
     //else                 
       "greenyellow"
-
 }
+
+//--------------------------------------------------------------------------------------------------------------------------------
 // the markersize funcition is used to set radius of the marker on the map
 
 function markerSize(magnitude) {
