@@ -38,6 +38,8 @@ function createMap(earthquakes) {
     // Create an overlayMaps object to hold the earthquakes layer
     var overlayMaps = {
       "Earthquakes": earthquakes
+    
+      
     };
   
     // Create the map object with options
@@ -70,29 +72,26 @@ function createMap(earthquakes) {
     legend.addTo(myMap);
     
 
+    ///------------------------------------------------------------------------
+    link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+    // Our style object
+    var mapStyle = {
+      color: "gold",
+      weight: 1.5
+    };
+
+    // Grabbing our GeoJSON data..
+    d3.json(link, function(data) {
+      // Creating a geoJSON layer with the retrieved data
+      L.geoJson(data, {
+        // Passing in our style object
+        style: mapStyle
+      }).addTo(myMap);
+    })
 
   }
 
-
- link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
-
-
-  d3.json(link, function(data) {
-    
-    console.log(data.features)
-  });
-
-
-  d3.json(link, function(data) {
-    // Creating a geoJSON layer with the retrieved data
-    L.geoJson(data, {
-      
-          color: "gold",
-          weight: 1.5
-        });
-      
-    }).addTo(myMap);
-  
   
  //--------------------------------------------------------------------------------------------------------------------------------------------- 
 
