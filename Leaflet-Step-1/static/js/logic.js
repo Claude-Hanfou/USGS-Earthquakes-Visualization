@@ -33,28 +33,50 @@ function createMap(earthquakes) {
 
 
 
-    var legend = L.control({position: 'bottomright'});
+    // var legend = L.control({position: 'bottomright'});
 
-    legend.onAdd = function(map) {
+    // legend.onAdd = function (map) {
     
-        var div = L.DomUtil.create('div', 'info legend'),
-        grades = [1,2,3,4,5],
-        labels = ["-10-10","10-30","30-50","50-70","70-90","90"];
+    //     var div = L.DomUtil.create('div', 'info legend'),
+    //     grades = [1,2,3,4,5],
+    //     labels = []
+    //     //["-10-10","10-30","30-50","50-70","70-90","90"];
     
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + chooseColor(grades[i] + 1) + '"></i> ' +
-                grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-    }
+    //     // loop through our density intervals and generate a label with a colored square for each interval
+    //     for (var i = 0; i < grades.length; i++) {
+    //         div.innerHTML +=
+    //             '<i style="background:' + chooseColor(grades[i] + 1) + '"></i> ' +
+    //             grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+    // }
     
-        return div;
-    };
+    //     return div;
+        
+    // };
     
-    legend.addTo(map);
+    // legend.addTo(map);
+
+    
 
 
   }
+
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Earthquake Depth</h4>";
+  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
+  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
+  div.innerHTML += '<i style="background: orange"></i><span>30-50</span><br>';
+  div.innerHTML += '<i style="background: brown"></i><span>50-70</span><br>';
+  div.innerHTML += '<i style="background: purple"></i><span>70-90</span><br>';
+  div.innerHTML += '<i style="background: red"></i><span>+90</span><br>';
+  return div;
+  };
+  legend.addTo(myMap);
+  
+
+
+ 
  //--------------------------------------------------------------------------------------------------------------------------------------------- 
 
 
@@ -125,3 +147,4 @@ function markerSize(magnitude) {
 
 
 
+//=---------------------------------------------
