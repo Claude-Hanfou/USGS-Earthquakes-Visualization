@@ -20,7 +20,7 @@ function createMap(earthquakes) {
     };
   
     // Create the map object with options
-    var map = L.map("mapid", {
+    var myMap = L.map("mapid", {
       center: [40.73, -74.0059],
       zoom: 3,
       layers: [lightmap, earthquakes]
@@ -29,7 +29,7 @@ function createMap(earthquakes) {
     // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
     L.control.layers(baseMaps,overlayMaps,  {
       collapsed: false
-    }).addTo(map);
+    }).addTo(myMap);
 
 
 
@@ -39,8 +39,7 @@ function createMap(earthquakes) {
     
     //     var div = L.DomUtil.create('div', 'info legend'),
     //     grades = [1,2,3,4,5],
-    //     labels = []
-    //     //["-10-10","10-30","30-50","50-70","70-90","90"];
+    //     labels = ["-10-10","10-30","30-50","50-70","70-90","90"];
     
     //     // loop through our density intervals and generate a label with a colored square for each interval
     //     for (var i = 0; i < grades.length; i++) {
@@ -53,27 +52,27 @@ function createMap(earthquakes) {
         
     // };
     
-    // legend.addTo(map);
+    // legend.addTo(myMap);
 
+    var legend = L.control({ position: "bottomright" });
+    legend.onAdd = function(map) {
+      var div = L.DomUtil.create("div", "legend");
+      div.innerHTML += "<h4>Earthquake Depth</h4>";
+      div.innerHTML += '<i style="background: greenyellow"></i><span>-10-10</span><br>';
+      div.innerHTML += '<i style="background: yellowgreen"></i><span>10-30</span><br>';
+      div.innerHTML += '<i style="background: yellow"></i><span>30-50</span><br>';
+      div.innerHTML += '<i style="background: gold"></i><span>50-70</span><br>';
+      div.innerHTML += '<i style="background: orange"></i><span>70-90</span><br>';
+      div.innerHTML += '<i style="background: red"></i><span>+90</span><br>';
+      return div;
+    };
+    legend.addTo(myMap);
     
 
 
   }
 
-  var legend = L.control({ position: "bottomright" });
-  legend.onAdd = function(map) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Earthquake Depth</h4>";
-  div.innerHTML += '<i style="background: green"></i><span>-10-10</span><br>';
-  div.innerHTML += '<i style="background: yellow"></i><span>10-30</span><br>';
-  div.innerHTML += '<i style="background: orange"></i><span>30-50</span><br>';
-  div.innerHTML += '<i style="background: brown"></i><span>50-70</span><br>';
-  div.innerHTML += '<i style="background: purple"></i><span>70-90</span><br>';
-  div.innerHTML += '<i style="background: red"></i><span>+90</span><br>';
-  return div;
-  };
-  legend.addTo(myMap);
-  
+ 
 
 
  
