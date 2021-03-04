@@ -58,12 +58,12 @@ function createMap(earthquakes) {
     legend.onAdd = function(map) {
       var div = L.DomUtil.create("div", "legend");
       div.innerHTML += "<h4>Earthquake Depth</h4>";
-      div.innerHTML += '<i style="background: greenyellow"></i><span>-10-10</span><br>';
-      div.innerHTML += '<i style="background: yellowgreen"></i><span>10-30</span><br>';
+      div.innerHTML += '<i style="background: yellowgreen"></i><span>-10-10</span><br>';
+      div.innerHTML += '<i style="background: limegreen"></i><span>10-30</span><br>';
       div.innerHTML += '<i style="background: yellow"></i><span>30-50</span><br>';
       div.innerHTML += '<i style="background: gold"></i><span>50-70</span><br>';
       div.innerHTML += '<i style="background: orange"></i><span>70-90</span><br>';
-      div.innerHTML += '<i style="background: red"></i><span>+90</span><br>';
+      div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
       return div;
     };
     legend.addTo(myMap);
@@ -94,15 +94,19 @@ function createCircles(response) {
   // Loop through the circles array
   for (var i = 0; i < earths.length; i++) {
       earth = earths[i].geometry.coordinates;
-      console.log(earth)
+      //console.log(earth)
+
+      console.log(earth[2])
 
       // For each station, create a marker and bind a popup with the place name
       
       var circle = L.circle([earth[1], earth[0]] , {
                    fillOpacity: .6,
-                   color: chooseColor(earths[i].properties.mag),
-                   fillColor: chooseColor(earths[i].properties.mag),
+                   color: chooseColor(earth[2]),
+                   fillColor: chooseColor(earth[2]),
                    radius: markerSize(earths[i].properties.mag)
+
+  
 
       }).bindPopup("<h3>" + earths[i].properties.place + "</h3><h3>Magnitude" + earths[i].properties.mag + "</h3>" )
 
@@ -128,13 +132,13 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
 //circles need colors and fill colors, since the choose color function was called inside the circle function, a choosecolor function is created 
 //this function uses a for loop to set the color of different magnitude level based on their numbers and
 function chooseColor(magnitude) {
-    return magnitude > 5 ? "red":
-           magnitude > 4 ? "orange":
-           magnitude > 3 ? "gold":
-           magnitude > 2 ? "yellow":
-           magnitude > 1 ? "yellowgreen":
+    return magnitude > 90 ? "red":
+           magnitude > 70 ? "orange":
+           magnitude > 50 ? "gold":
+           magnitude > 30 ? "yellow":
+           magnitude > 10 ? "greenyellow":
     //else                 
-      "greenyellow"
+      "limegreen"
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------
