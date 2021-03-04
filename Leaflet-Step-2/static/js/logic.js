@@ -73,10 +73,27 @@ function createMap(earthquakes) {
 
   }
 
- 
+
+ link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
 
 
- 
+  d3.json(link, function(data) {
+    
+    console.log(data.features)
+  });
+
+
+  d3.json(link, function(data) {
+    // Creating a geoJSON layer with the retrieved data
+    L.geoJson(data, {
+      
+          color: "gold",
+          weight: 1.5
+        });
+      
+    }).addTo(myMap);
+  
+  
  //--------------------------------------------------------------------------------------------------------------------------------------------- 
 
 
@@ -86,7 +103,7 @@ function createCircles(response) {
 
   // Pull the "stations" property off of response.data
   var earths = response.features;
-  console.log(earths)
+  //console.log(earths)
  
 
  // Initialize an array to hold circles for the map
@@ -97,7 +114,7 @@ function createCircles(response) {
       earth = earths[i].geometry.coordinates;
       //console.log(earth)
 
-      console.log(earth[2])
+      //console.log(earth[2])
 
       // For each station, create a marker and bind a popup with the place name
       
