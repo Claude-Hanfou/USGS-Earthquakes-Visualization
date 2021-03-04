@@ -108,7 +108,7 @@ function createCircles(response) {
 
   
 
-      }).bindPopup("<h3>" + earths[i].properties.place + "</h3><h3>Magnitude" + earths[i].properties.mag + "</h3>" )
+      }).bindPopup("<h3>" + earths[i].properties.place + "</h3><h3>Magnitude" + earths[i].properties.mag + "</h3>" + "<hr><p>" + new Date(earths[i].properties.time) + "</p>" )
 
 
       // Add the marker to the Circles array
