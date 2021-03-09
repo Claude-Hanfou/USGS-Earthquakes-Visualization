@@ -1,170 +1,155 @@
-//Create a create map function that is going to be called below when the data is collected from the json
-function createMap(earthquakes) {
-
-    // Create the tile layer that will be the background of our map
-
-    var satelitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-      attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-      maxZoom: 18,
-      id: "satellite-v9",
-      accessToken: API_KEY
-    });
-
-    var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-      attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-      maxZoom: 18,
-      id: "light-v10",
-      accessToken: API_KEY
-    });
 
 
-    var outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-      attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-      maxZoom: 18,
-      id: "outdoors-v11",
-      accessToken: API_KEY
-    });
+ //Create a layer group made for the circles and tectonic plates
+ var earthquakes = L.layerGroup();
+ var tectonic_plates = L.layerGroup(); 
+
+ // Create the tile layer that will be the background of our map
+ var satelitemap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "satellite-v9",
+    accessToken: API_KEY
+  });
+
+  var graymap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "light-v10",
+    accessToken: API_KEY
+  });
+
+
+  var outdoorsmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "outdoors-v11",
+    accessToken: API_KEY
+  });
+
+
+
+
+// Create a baseMaps object to hold the lightmap layer
+var baseMaps = {
+    "Satelite": satelitemap,
+    "Grayscale": graymap,
+    "Outdoors" : outdoorsmap
+  };
+
+// Create an overlayMaps object to hold the earthquakes layer
+var overlayMaps = {
+    "Earthquakes": earthquakes,
+    "Tectonic Plates" : tectonic_plates
+  };
+
+// Create the map object with options
+var myMap = L.map("mapid", {
+    center: [40.73, -74.0059],
+    zoom: 3,
+    layers: [satelitemap, earthquakes]
+  });
+
+  // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
+  L.control.layers(baseMaps,overlayMaps,  {
+    collapsed: false
+  }).addTo(myMap);
+
+
+
+
+var legend = L.control({ position: "bottomright" });
+legend.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "legend");
+    div.innerHTML += "<h4>Earthquake Depth</h4>";
+    div.innerHTML += '<i style="background: yellowgreen"></i><span>-10-10</span><br>';
+    div.innerHTML += '<i style="background: limegreen"></i><span>10-30</span><br>';
+    div.innerHTML += '<i style="background: yellow"></i><span>30-50</span><br>';
+    div.innerHTML += '<i style="background: gold"></i><span>50-70</span><br>';
+    div.innerHTML += '<i style="background: orange"></i><span>70-90</span><br>';
+    div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
+    return div;
+  };
+  legend.addTo(myMap);
   
 
 
 
-    // Create a baseMaps object to hold the lightmap layer
-    var baseMaps = {
-      "Satelite": satelitemap,
-      "Grayscale": graymap,
-      "Outdoors" : outdoorsmap
+
+
+url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"    
+link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+   
+d3.json(url, function(earthquakeData) {
+    // the markersize funcition is used to set radius of the marker on the map
+    // Determine the marker size by magnitude
+    function markerSize(magnitude) {
+      return magnitude * 4;
     };
-  
-    // Create an overlayMaps object to hold the earthquakes layer
-    var overlayMaps = {
-      "Earthquakes": earthquakes
+    // Determine the marker color by depth
     
-      
-    };
+    //this function uses a for loop to set the color of different magnitude level based on their numbers and
+    function chooseColor(depth) {
+      switch(true) {
+        case depth > 90:
+          return "red";
+        case depth > 70:
+          return "orange";
+        case depth > 50:
+          return "gold";
+        case depth > 30:
+          return "gold";
+        case depth > 10:
+          return "yellow";
+        default:
+          return "greenyellow";
+      }
+    }
   
-    // Create the map object with options
-    var myMap = L.map("mapid", {
-      center: [40.73, -74.0059],
-      zoom: 3,
-      layers: [satelitemap, earthquakes]
-    });
-  
-    // Create a layer control, pass in the baseMaps and overlayMaps. Add the layer control to the map
-    L.control.layers(baseMaps,overlayMaps,  {
-      collapsed: false
-    }).addTo(myMap);
+    // Create a GeoJSON layer containing the features array
+    // Each feature a popup describing the place and time of the earthquake
+    L.geoJSON(earthquakeData, {
+      pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, 
+          // Set the style of the markers based on properties.mag
+          {
+            radius: markerSize(feature.properties.mag),
+            fillColor: chooseColor(feature.geometry.coordinates[2]),
+            fillOpacity: 0.7,
+            color: "black",
+            stroke: true,
+            weight: 0.5
+          }
+        );
+      },
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup("<h3>" + feature.properties.place + "</h3><h3>Magnitude" + feature.properties.mag + "</h3>"+ "<hr><p>" +
+         new Date(feature.properties.time) + "</p>"  )
+      }
+    }).addTo(earthquakes);
+    // Sending our earthquakes layer to the createMap function
+    earthquakes.addTo(myMap);
 
 
+})
 
 
-    var legend = L.control({ position: "bottomright" });
-    legend.onAdd = function(map) {
-      var div = L.DomUtil.create("div", "legend");
-      div.innerHTML += "<h4>Earthquake Depth</h4>";
-      div.innerHTML += '<i style="background: yellowgreen"></i><span>-10-10</span><br>';
-      div.innerHTML += '<i style="background: limegreen"></i><span>10-30</span><br>';
-      div.innerHTML += '<i style="background: yellow"></i><span>30-50</span><br>';
-      div.innerHTML += '<i style="background: gold"></i><span>50-70</span><br>';
-      div.innerHTML += '<i style="background: orange"></i><span>70-90</span><br>';
-      div.innerHTML += '<i style="background: red"></i><span>90+</span><br>';
-      return div;
-    };
-    legend.addTo(myMap);
-    
-
-    ///------------------------------------------------------------------------
-    link = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
-
-    // Our style object
-    var mapStyle = {
-      color: "gold",
-      weight: 1.5
-    };
-
-    // Grabbing our GeoJSON data..
-    d3.json(link, function(data) {
-      // Creating a geoJSON layer with the retrieved data
-      L.geoJson(data, {
-        // Passing in our style object
-        style: mapStyle
-      }).addTo(myMap);
-    })
-
-  }
-
-  
- //--------------------------------------------------------------------------------------------------------------------------------------------- 
+ // Our style object
+ var mapStyle = {
+    color: "gold",
+    weight: 1.5
+  };
 
 
-//the create circle function is going to update the map with the earthquake data in the form of circles
-//the function takes a paraameter that later be replaced
-function createCircles(response) {
-
-  // Pull the "stations" property off of response.data
-  var earths = response.features;
-  //console.log(earths)
- 
-
- // Initialize an array to hold circles for the map
-  Circles = [];
-
-  // Loop through the circles array
-  for (var i = 0; i < earths.length; i++) {
-      earth = earths[i].geometry.coordinates;
-      //console.log(earth)
-
-      //console.log(earth[2])
-
-      // For each station, create a marker and bind a popup with the place name
-      
-      var circle = L.circle([earth[1], earth[0]] , {
-                   fillOpacity: .6,
-                   color: chooseColor(earth[2]),
-                   fillColor: chooseColor(earth[2]),
-                   radius: markerSize(earths[i].properties.mag)
+  // Grabbing our GeoJSON data..
+  d3.json(link, function(data) {
+    // Creating a geoJSON layer with the retrieved data
+     L.geoJson(data, {
+      // Passing in our style object
+      style: mapStyle
+    }).addTo(tectonic_plates);
+    tectonic_plates.addTo(myMap)
+  })
 
   
-
-      }).bindPopup("<h3>" + earths[i].properties.place + "</h3><h3>Magnitude" + earths[i].properties.mag + "</h3>"+ "<hr><p>" + new Date(earths[i].properties.time) + "</p>"  )
-
-
-      // Add the marker to the Circles array
-      Circles.push(circle);
-  }
-  
-
-  // Create a layer group made from the circles markers array, pass it into the createMap function
-     createMap(L.layerGroup(Circles));
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------------
-
-
-//get the json data from earthquakes in the last 7 days
-d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson", createCircles);
-
-//---------------------------------------------------------------------------------------------------------------------------------
-
-//circles need colors and fill colors, since the choose color function was called inside the circle function, a choosecolor function is created 
-//this function uses a for loop to set the color of different magnitude level based on their numbers and
-function chooseColor(magnitude) {
-    return magnitude > 90 ? "red":
-           magnitude > 70 ? "orange":
-           magnitude > 50 ? "gold":
-           magnitude > 30 ? "yellow":
-           magnitude > 10 ? "greenyellow":
-    //else                 
-      "limegreen"
-}
-
-//--------------------------------------------------------------------------------------------------------------------------------
-// the markersize funcition is used to set radius of the marker on the map
-
-function markerSize(magnitude) {
-    return magnitude * 20000
-  }
-
-
-
-//=---------------------------------------------
