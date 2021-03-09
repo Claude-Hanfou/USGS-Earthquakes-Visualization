@@ -101,10 +101,12 @@ function createCircles(response) {
       // For each station, create a marker and bind a popup with the place name
       
       var circle = L.circle([earth[1], earth[0]] , {
-                   fillOpacity: .6,
+                   fillOpacity: .7,
                    color: chooseColor(earth[2]),
+                  //  color: "black",
                    fillColor: chooseColor(earth[2]),
-                   radius: markerSize(earths[i].properties.mag)
+                   radius: markerSize(earths[i].properties.mag),
+                   weight: 0.5
 
   
 
@@ -145,7 +147,7 @@ function chooseColor(magnitude) {
 // the markersize funcition is used to set radius of the marker on the map
 
 function markerSize(magnitude) {
-    return magnitude * 20000
+    return magnitude * 50000
   }
 
 
