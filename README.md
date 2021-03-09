@@ -6,9 +6,9 @@
 
 
 Leaflet1
-![alt text](https://github.com/Claude-Hanfou/Data-Journalism-and-D3/blob/main/Images/graph%201.PNG "etl")
+![alt text](https://github.com/Claude-Hanfou/USGS-Earthquakes-Visualization/blob/main/Images/Leaf%201.PNG "Earthquake 1")
 
 
 ### Leaflet 2
 
-![alt text](https://github.com/Claude-Hanfou/Data-Journalism-and-D3/blob/main/Images/graph%201.PNG "etl")
+![alt text](https://github.com/Claude-Hanfou/USGS-Earthquakes-Visualization/blob/main/Images/Leaf%202.PNG "Earthquake 2")
