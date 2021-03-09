@@ -5,7 +5,7 @@ The USGS is responsible for providing scientific data about natural hazards, the
 The project centers around building a new set of tools that will allow to visualize the USGS earthquake data. USGS collectS a massive amount of data from all over the world each day, and this project focuses on giving  a meaningful way of displaying the data. The goal is to better educate the public and other government organizations (and hopefully secure more funding..) on issues facing our planet.
 
 
-<img src="https://media.giphy.com/media/GCjueAStKH9yU/giphy.gif" width="500" height="400" />  
+<img src="https://github.com/Claude-Hanfou/USGS-Earthquakes-Visualization/blob/main/Images/gif.gif" width="500" height="400" />  
 
 
 ## Leaflet1
