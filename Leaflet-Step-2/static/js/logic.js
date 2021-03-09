@@ -134,7 +134,7 @@ d3.json(url, function(earthquakeData) {
 
 })
 
-
+// Create the tectonic plates on the map
  // Our style object
  var mapStyle = {
     color: "gold",
