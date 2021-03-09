@@ -8,7 +8,7 @@ The project centers around building a new set of tools that will allow to visual
 <img src="https://media.giphy.com/media/GCjueAStKH9yU/giphy.gif" width="500" height="400" />  
 
 
-### Leaflet1
+## Leaflet1
 
 The USGS provides earthquake data in a number of different formats, updated every 5 minutes. On the USGS GeoJSON Feed page, the data set selected was displayed on the map below. A JSON representation of that data was used to create a circle on the map below. 
 
@@ -20,7 +20,12 @@ Also popups that provide additional information about the earthquake when a mark
 ![alt text](https://github.com/Claude-Hanfou/USGS-Earthquakes-Visualization/blob/main/Images/Leaf%201.PNG "Earthquake 1")
 
 
-### Leaflet 2
+## Leaflet 2
+
+IN Leaflet 2 a second dataset was included on the map. The data set illustrates the relationship between tectonic plates and seismic activity. The second data set which is data about tectonic plates can be found at https://github.com/fraxen/tectonicplates.
+A number of base maps to choose from were added to the map. Also, the datasets were separated out into two differentinto overlays that can be turned on and off
+independently. Layer controls were added to the map.
+
 
 ![alt text](https://github.com/Claude-Hanfou/USGS-Earthquakes-Visualization/blob/main/Images/Leaf%202.PNG "Earthquake 2")
-.hh
+
